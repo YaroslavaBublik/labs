@@ -14,8 +14,8 @@ int main()
         if(fp != NULL) {
             char str_id[12];
             sprintf(str_id, "%d", getpid());
-            printf("%s", "Дочерний процесс - ID: ");
-            printf("%s", strcat(str_id, "\n"));
+            fprintf(fp,"%s", "Дочерний процесс - ID: ");
+            fprintf(fp,"%s", strcat(str_id, "\n"));
             for (int i = 0; i < (1024*1024*10)/7; ++i){
                 fputs("Ya daun", fp);
             }
@@ -23,16 +23,18 @@ int main()
         fclose(fp);
     }
     else if (pid) {
+        FILE *fp = fopen("file.txt", "w");
     	char str_id[12];
         int status = 0;
         struct tms time;
         sprintf(str_id, "%d", getpid());
-        printf("%s", "Родительский процесс, ожидаю - ID: ");
-        printf("%s", strcat(str_id, "\n"));
+        fprintf(fp,"%s", "Родительский процесс, ожидаю - ID: ");
+        fprintf(fp,"%s", strcat(str_id, "\n"));
 		waitpid(pid, &status, 0);
         times(&time);
-        printf("%s", "Родительский процесс, наканецта!\n");
-        printf("Time: %f ms\n", (double)(time.tms_cutime));
+        fprintf(fp,"%s", "Родительский процесс, наканецта!\n");
+        fprintf(fp,"Time: %f ms\n", (double)(time.tms_cutime));
+        fclose(fp);
     }
 	else {
 		perror("fork");
